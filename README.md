@@ -1,5 +1,22 @@
 # DemoAngularNgxIndexedDb
 
+This project is intended to demonstrate how to use the ngx-indexed-db service.
+
+See https://www.npmjs.com/package/ngx-indexed-db
+
+And tries to explain some concepts that were not clear to me from the documentation
+
+
+
+
+
+
+
+
+
+
+## Boilerplate
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.7.
 
 ## Development server
