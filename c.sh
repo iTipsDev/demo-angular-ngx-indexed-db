@@ -33,7 +33,7 @@ echo $DLIN
 echo $LINE
 echo "git push origin master"
 echo $LINE
-git push origin main
+git push origin master
 echo $DLIN
 
 echo $LINE
