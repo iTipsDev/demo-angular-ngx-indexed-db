@@ -84,6 +84,9 @@ export class IRSFormInfoService implements OnDestroy {
 
     }
 
+    // Show results
+    this.getAll( );
+
   }
 
   addItem(item: IRSFormInfo) {
@@ -95,9 +98,6 @@ export class IRSFormInfoService implements OnDestroy {
 
           // console.log('addIrsFormInfo key: ', key); TOO NOISY
 
-          // Show the results
-          this.getAll();
-
         },
 
         (error) => {
@@ -105,6 +105,7 @@ export class IRSFormInfoService implements OnDestroy {
           this.errorMessage = error.errorMessage;
 
         }
+
       );
 
 
@@ -178,6 +179,8 @@ export class IRSFormInfoService implements OnDestroy {
 
   addBulkData() {
 
+    // This fails as of 2023 10 23
+
     this.sub = this.dbService
       .bulkAdd( STORE_NAME, this.sampleData )
       .subscribe(
@@ -206,8 +209,6 @@ export class IRSFormInfoService implements OnDestroy {
         }
 
       );
-
-
 
   }
 
