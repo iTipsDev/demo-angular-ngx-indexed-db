@@ -6,19 +6,31 @@
 
     <div class="col-lg-5">
 
-      <h4 class="text-center">Actions</h4>
+      <h4 class="text-center">Store Actions</h4>
 
-      <button (click)="service.createStore( )" class="btn btn-primary btn-block my-2">Create Store ({{ STORE_NAME }})</button>
+      <button (click)="service.createStore( )"
+              class="btn btn-primary btn-block my-2">Create Store ({{ STORE_NAME }})
+      </button>
 
-      <button (click)="service.addData( )" class="btn btn-primary btn-block my-2">Add Data to Store (One at a time)</button>
+      <button (click)="service.deleteStore( )"
+              class="btn btn-danger btn-block my-2">Delete Store</button>
 
-      <button (click)="service.addBulkData( )" class="btn btn-primary btn-block my-2">Add Data to Store (Bulk)</button>
+      <h4 class="text-center mt-4">Data Actions</h4>
 
-      <button (click)="service.clearStore( )" class="btn btn-primary btn-block my-2">Clear Store</button>
+      <button (click)="service.addData( )"
+              class="btn btn-primary btn-block my-2">Add Data to Store (One at a time)
+      </button>
 
-      <button (click)="service.deleteStore( )" class="btn btn-primary btn-block my-2">Delete Store</button>
+      <button (click)="service.addBulkData( )"
+              class="btn btn-primary btn-block my-2">Add Data to Store (Bulk)</button>
 
-      <button (click)="service.deleteDb( )" class="btn btn-primary btn-block my-2">Delect DB ({{ DB_NAME }})</button>
+      <button (click)="service.clearStore( )"
+              class="btn btn-primary btn-block my-2">Clear Store</button>
+
+      <h4 class="text-center mt-4">Database (DB) Actions</h4>
+
+      <button (click)="service.deleteDb( )"
+              class="btn btn-danger btn-block my-2">Delete DB ({{ DB_NAME }})</button>
 
     </div>
 
@@ -26,7 +38,17 @@
 
       <h4 class="text-center">Store Contents</h4>
 
-      <pre>{{ service.fips$ | async | json }}</pre>
+      <div *ngIf="service.fips$ | async as fips">
+
+        <ul>
+
+          <li *ngFor="let fip of fips">
+            {{ fip.productNumber }} {{ fip.title }}
+          </li>
+
+        </ul>
+
+      </div>
 
     </div>
 
@@ -37,7 +59,50 @@
 
     <div class="col-lg-8 offset-lg-2">
 
-      <div class="alert alert-danger">{{ service.errorMessage }}</div>
+      <div class="alert alert-danger">
+        <p>Error as String</p>
+        <p>
+          {{ service.errorMessage }}
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="service.errorAsJson"
+       class="row my-5">
+
+    <div class="col-lg-8 offset-lg-2">
+
+      <div class="alert alert-danger">
+        <p>Error as JSON</p>
+        <p>
+          {{ service.errorAsJson }}
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="service.successMessage"
+       class="row my-5">
+
+    <div class="col-lg-8 offset-lg-2">
+
+      <div class="alert alert-success">{{ service.successMessage }}</div>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="service.warningMessage"
+       class="row my-5">
+
+    <div class="col-lg-8 offset-lg-2">
+
+      <div class="alert alert-warning">{{ service.warningMessage }}</div>
 
     </div>
 

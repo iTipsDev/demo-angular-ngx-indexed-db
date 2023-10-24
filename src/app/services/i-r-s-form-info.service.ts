@@ -49,7 +49,13 @@ export class IRSFormInfoService implements OnDestroy {
 
   public sub: Subscription;
 
+  public successMessage: string = '';
+
+  public warningMessage: string = '';
+
   public errorMessage: string = '';
+
+  public errorAsJson: string = '';
 
   constructor(
     private dbService: NgxIndexedDBService
@@ -72,11 +78,25 @@ export class IRSFormInfoService implements OnDestroy {
     // It is not clear whether this step creates the DB if not present or
     // if the DB is already created by the app module
 
+    // Clear any prior error messages
+    this.clearMessages();
+
     this.dbService.createObjectStore(STORE_META);
 
   }
 
+  public clearMessages( ) {
+
+    this.errorMessage = '';
+    this.warningMessage = '';
+    this.successMessage = '';
+
+  }
+
   addData() {
+
+    // Clear any prior messages
+    this.clearMessages( );
 
     for (let item of this.sampleData) {
 
@@ -102,7 +122,7 @@ export class IRSFormInfoService implements OnDestroy {
 
         (error) => {
 
-          this.errorMessage = error.errorMessage;
+          this.handleError( error );
 
         }
 
@@ -113,27 +133,39 @@ export class IRSFormInfoService implements OnDestroy {
 
   clearStore() {
 
+    // Clear any prior messages
+    this.clearMessages( );
+
     this.dbService.clear(STORE_NAME).subscribe(
       (successDeleted) => {
 
         this.fips = [];
-
         this.fipsSubject.next(this.fips);
 
         console.log('success? ', successDeleted);
+
+        if ( successDeleted ) {
+          this.successMessage = 'Cleared store';
+        } else {
+          this.errorMessage = 'Unable to clear store';
+        }
 
       },
 
       (error) => {
 
-        this.errorMessage = error.errorMessage;
+        this.handleError( error );
 
       }
+
     );
 
   }
 
   deleteStore() {
+
+    // Clear any prior messages
+    this.clearMessages( );
 
     this.dbService.deleteObjectStore(STORE_NAME);
 
@@ -141,18 +173,29 @@ export class IRSFormInfoService implements OnDestroy {
 
   deleteDb() {
 
+    // Clear any prior messages
+    this.clearMessages( );
+
     this.dbService.deleteDatabase().subscribe(
+
       (deleted) => {
 
         console.log('Database deleted successfully: ', deleted);
+
+        if ( deleted ) {
+          this.successMessage = 'Database deleted successfully';
+        } else {
+          this.errorMessage = 'Database deletion failed';
+        }
 
       },
 
       (error) => {
 
-        this.errorMessage = error.errorMessage;
+        this.handleError( error );
 
       }
+
     );
 
   }
@@ -160,6 +203,7 @@ export class IRSFormInfoService implements OnDestroy {
   public getAll() {
 
     this.sub = this.dbService.getAll(STORE_NAME).subscribe(
+
       (fips: any[]) => { // TODO any[] versus IRSFormInfo[]?
 
         this.fips = fips;
@@ -170,14 +214,18 @@ export class IRSFormInfoService implements OnDestroy {
 
       (error) => {
 
-        this.errorMessage = error.errorMessage;
+        this.handleError( error );
 
       }
-    );
+
+   );
 
   }
 
   addBulkData() {
+
+    // Clear any prior messages
+    this.clearMessages( );
 
     // This fails as of 2023 10 23
 
@@ -199,16 +247,24 @@ export class IRSFormInfoService implements OnDestroy {
 
         ( error ) => {
 
-          console.log(
-            'error: ',
-            JSON.stringify( error )
-          );
-
-          this.errorMessage = error;
+          this.handleError( error );
 
         }
 
       );
+
+  }
+
+  public handleError(
+    error: any
+  ) {
+
+    this.errorAsJson = JSON.stringify( error, null, 4 );
+
+    this.errorMessage = error.errorMessage;
+
+    console.log( this.errorAsJson );
+
 
   }
 
