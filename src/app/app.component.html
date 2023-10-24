@@ -4,13 +4,15 @@
 
   <div class="row">
 
-    <div class="col-lg-3">
+    <div class="col-lg-5">
 
       <h4 class="text-center">Actions</h4>
 
       <button (click)="service.createStore( )" class="btn btn-primary btn-block my-2">Create Store ({{ STORE_NAME }})</button>
 
-      <button (click)="service.addData( )" class="btn btn-primary btn-block my-2">Add Data to Store</button>
+      <button (click)="service.addData( )" class="btn btn-primary btn-block my-2">Add Data to Store (One at a time)</button>
+
+      <button (click)="service.addBulkData( )" class="btn btn-primary btn-block my-2">Add Data to Store (Bulk)</button>
 
       <button (click)="service.clearStore( )" class="btn btn-primary btn-block my-2">Clear Store</button>
 
@@ -20,7 +22,7 @@
 
     </div>
 
-    <div class="col-lg-9">
+    <div class="col-lg-7">
 
       <h4 class="text-center">Store Contents</h4>
 

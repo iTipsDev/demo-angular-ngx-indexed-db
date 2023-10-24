@@ -78,14 +78,22 @@ export class IRSFormInfoService implements OnDestroy {
 
   addData() {
 
-    let data = this.sampleData[0];
+    for (let item of this.sampleData) {
+
+      this.addItem(item);
+
+    }
+
+  }
+
+  addItem(item: IRSFormInfo) {
 
     this.sub = this.dbService
-      .add(STORE_NAME, data)
+      .add(STORE_NAME, item)
       .subscribe(
         (key) => {
 
-          console.log('addIrsFormInfo key: ', key);
+          // console.log('addIrsFormInfo key: ', key); TOO NOISY
 
           // Show the results
           this.getAll();
@@ -104,15 +112,14 @@ export class IRSFormInfoService implements OnDestroy {
 
   clearStore() {
 
-    this.dbService.clear( STORE_NAME ).subscribe(
-
-      ( successDeleted ) => {
+    this.dbService.clear(STORE_NAME).subscribe(
+      (successDeleted) => {
 
         this.fips = [];
 
-        this.fipsSubject.next( this.fips );
+        this.fipsSubject.next(this.fips);
 
-        console.log( 'success? ', successDeleted );
+        console.log('success? ', successDeleted);
 
       },
 
@@ -121,24 +128,22 @@ export class IRSFormInfoService implements OnDestroy {
         this.errorMessage = error.errorMessage;
 
       }
-
     );
 
   }
 
   deleteStore() {
 
-    this.dbService.deleteObjectStore( STORE_NAME );
+    this.dbService.deleteObjectStore(STORE_NAME);
 
   }
 
   deleteDb() {
 
     this.dbService.deleteDatabase().subscribe(
+      (deleted) => {
 
-      ( deleted ) => {
-
-        console.log( 'Database deleted successfully: ', deleted );
+        console.log('Database deleted successfully: ', deleted);
 
       },
 
@@ -147,7 +152,6 @@ export class IRSFormInfoService implements OnDestroy {
         this.errorMessage = error.errorMessage;
 
       }
-
     );
 
   }
@@ -155,7 +159,6 @@ export class IRSFormInfoService implements OnDestroy {
   public getAll() {
 
     this.sub = this.dbService.getAll(STORE_NAME).subscribe(
-
       (fips: any[]) => { // TODO any[] versus IRSFormInfo[]?
 
         this.fips = fips;
@@ -169,8 +172,42 @@ export class IRSFormInfoService implements OnDestroy {
         this.errorMessage = error.errorMessage;
 
       }
-
     );
+
+  }
+
+  addBulkData() {
+
+    this.sub = this.dbService
+      .bulkAdd( STORE_NAME, this.sampleData )
+      .subscribe(
+
+        ( keys ) => {
+
+          console.log(
+            'addBulkData keys: ',
+            JSON.stringify( keys )
+          );
+
+          // Show
+          this.getAll( );
+
+        },
+
+        ( error ) => {
+
+          console.log(
+            'error: ',
+            JSON.stringify( error )
+          );
+
+          this.errorMessage = error;
+
+        }
+
+      );
+
+
 
   }
 
