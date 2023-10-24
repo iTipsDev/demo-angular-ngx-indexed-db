@@ -5,7 +5,7 @@ CDATE=$(date '+%Y-%m-%dT%H:%M')
 echo $LINE
 echo "git pull origin master"
 echo $LINE
-git pull origin main
+git pull origin master
 echo $DLIN
 
 echo $LINE
