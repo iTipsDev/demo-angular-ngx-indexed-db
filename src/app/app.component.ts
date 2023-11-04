@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import {IRSFormInfoService, STORE_NAME} from "./services/i-r-s-form-info.service";
+import {IRSFormInfoService1} from "./services/i-r-s-form-info-service1.service";
 import {DB_NAME} from "./app.module";
+import {IRSFormInfoService2} from "./services/i-r-s-form-info-service2.service";
 
 @Component({
   selector: 'app-root',
@@ -11,13 +12,13 @@ export class AppComponent {
 
   title = 'demo-angular-ngx-indexed-db';
 
-
   constructor(
-    public service: IRSFormInfoService
+    public service1: IRSFormInfoService1,
+    public service2: IRSFormInfoService2
   ) {
 
   }
 
   protected readonly DB_NAME = DB_NAME;
-  protected readonly STORE_NAME = STORE_NAME;
+
 }

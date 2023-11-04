@@ -1,52 +1,122 @@
-<div class="container">
+<div class="container-fluid">
 
   <h2 class="text-center my-5">Demo Angular ngx-indexed-db</h2>
 
   <div class="row">
 
-    <div class="col-lg-5">
+    <div class="col-lg-8">
 
-      <h4 class="text-center">Store Actions</h4>
+  <div style="background-color: #eee; padding: 36px;">
 
-      <button (click)="service.createStore( )"
-              class="btn btn-primary btn-block my-2">Create Store ({{ STORE_NAME }})
-      </button>
+    <h4 class="text-center mb-3">Using Primary Key (id) from Data</h4>
 
-      <button (click)="service.deleteStore( )"
-              class="btn btn-danger btn-block my-2">Delete Store</button>
+    <div class="row">
 
-      <h4 class="text-center mt-4">Data Actions</h4>
+      <div class="col-lg-5">
 
-      <button (click)="service.addData( )"
-              class="btn btn-primary btn-block my-2">Add Data to Store (One at a time)
-      </button>
+        <h4 class="text-center">Store Actions</h4>
 
-      <button (click)="service.addBulkData( )"
-              class="btn btn-primary btn-block my-2">Add Data to Store (Bulk)</button>
+        <button (click)="service1.createStore( )"
+                class="btn btn-primary btn-block my-2">Create Store ({{ service1.storeName }})
+        </button>
 
-      <button (click)="service.clearStore( )"
-              class="btn btn-primary btn-block my-2">Clear Store</button>
+        <button (click)="service1.deleteStore( )"
+                class="btn btn-danger btn-block my-2">Delete Store
+        </button>
 
-      <h4 class="text-center mt-4">Database (DB) Actions</h4>
+        <h4 class="text-center mt-4">Data Actions</h4>
 
-      <button (click)="service.deleteDb( )"
-              class="btn btn-danger btn-block my-2">Delete DB ({{ DB_NAME }})</button>
+<!--        <button (click)="service1.addData( )"-->
+<!--                class="btn btn-primary btn-block my-2">Add Data to Store (One at a time)-->
+<!--        </button>-->
+
+        <button (click)="service1.addBulkData( )"
+                class="btn btn-primary btn-block my-2">Add Data to Store (Bulk)
+        </button>
+
+        <button (click)="service1.clearStore( )"
+                class="btn btn-primary btn-block my-2">Clear Store
+        </button>
+
+        <h4 class="text-center mt-4">Database (DB) Actions</h4>
+
+        <button (click)="service1.deleteDb( )"
+                class="btn btn-danger btn-block my-2">Delete DB ({{ DB_NAME }})
+        </button>
+
+      </div>
+
+      <div class="col-lg-7">
+
+        <h4 class="text-center">Store Contents</h4>
+
+        <div *ngIf="service1.fips$ | async as fips1">
+
+          <ul>
+
+            <li *ngFor="let fip of fips1">
+              {{ fip.id }} {{ fip.productNumber }} {{ fip.title }}
+            </li>
+
+          </ul>
+
+          <pre>{{ fips1[0] | json }}</pre>
+
+        </div>
+
+      </div>
 
     </div>
 
-    <div class="col-lg-7">
+    <div *ngIf="service1.errorMessage"
+         class="row my-5">
 
-      <h4 class="text-center">Store Contents</h4>
+      <div class="col-lg-8 offset-lg-2">
 
-      <div *ngIf="service.fips$ | async as fips">
+        <div class="alert alert-danger">
+          <p>Error as String</p>
+          <p>
+            {{ service1.errorMessage }}
+          </p>
+        </div>
 
-        <ul>
+      </div>
 
-          <li *ngFor="let fip of fips">
-            {{ fip.productNumber }} {{ fip.title }}
-          </li>
+    </div>
 
-        </ul>
+    <div *ngIf="service1.errorAsJson"
+         class="row my-5">
+
+      <div class="col-lg-8 offset-lg-2">
+
+        <div class="alert alert-danger">
+          <p>Error as JSON</p>
+          <p>
+            {{ service1.errorAsJson }}
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div *ngIf="service1.successMessage"
+         class="row my-5">
+
+      <div class="col-lg-8 offset-lg-2">
+
+        <div class="alert alert-success">{{ service1.successMessage }}</div>
+
+      </div>
+
+    </div>
+
+    <div *ngIf="service1.warningMessage"
+         class="row my-5">
+
+      <div class="col-lg-8 offset-lg-2">
+
+        <div class="alert alert-warning">{{ service1.warningMessage }}</div>
 
       </div>
 
@@ -54,59 +124,160 @@
 
   </div>
 
-  <div *ngIf="service.errorMessage"
-       class="row my-5">
+  <div style="background-color: #eee; padding: 36px; margin-top: 72px;">
 
-    <div class="col-lg-8 offset-lg-2">
+    <h4 class="text-center mb-3">Letting IndexedDB Assign Primary Key (idx)</h4>
 
-      <div class="alert alert-danger">
-        <p>Error as String</p>
-        <p>
-          {{ service.errorMessage }}
-        </p>
+    <div class="row">
+
+      <div class="col-lg-5">
+
+        <h4 class="text-center">Store Actions</h4>
+
+        <button (click)="service2.createStore( )"
+                class="btn btn-primary btn-block my-2">Create Store ({{ service2.storeName }})
+        </button>
+
+        <button (click)="service2.deleteStore( )"
+                class="btn btn-danger btn-block my-2">Delete Store
+        </button>
+
+        <h4 class="text-center mt-4">Data Actions</h4>
+
+<!--        <button (click)="service2.addData( )"-->
+<!--                class="btn btn-primary btn-block my-2">Add Data to Store (One at a time)-->
+<!--        </button>-->
+
+        <button (click)="service2.addBulkData( )"
+                class="btn btn-primary btn-block my-2">Add Data to Store (Bulk)
+        </button>
+
+        <button (click)="service2.clearStore( )"
+                class="btn btn-primary btn-block my-2">Clear Store
+        </button>
+
+        <h4 class="text-center mt-4">Database (DB) Actions</h4>
+
+        <button (click)="service2.deleteDb( )"
+                class="btn btn-danger btn-block my-2">Delete DB ({{ DB_NAME }})
+        </button>
+
+      </div>
+
+      <div class="col-lg-7">
+
+        <h4 class="text-center">Store Contents</h4>
+
+        <div *ngIf="service2.fips$ | async as fips2">
+
+          <ul>
+
+            <li *ngFor="let fip of fips2">
+                {{ fip.id }} {{ fip.productNumber }} {{ fip.title }}
+            </li>
+
+          </ul>
+
+          <pre>{{ fips2[0] | json }}</pre>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div *ngIf="service2.errorMessage"
+         class="row my-5">
+
+      <div class="col-lg-8 offset-lg-2">
+
+        <div class="alert alert-danger">
+          <p>Error as String</p>
+          <p>
+            {{ service2.errorMessage }}
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div *ngIf="service2.errorAsJson"
+         class="row my-5">
+
+      <div class="col-lg-8 offset-lg-2">
+
+        <div class="alert alert-danger">
+          <p>Error as JSON</p>
+          <p>
+            {{ service2.errorAsJson }}
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div *ngIf="service2.successMessage"
+         class="row my-5">
+
+      <div class="col-lg-8 offset-lg-2">
+
+        <div class="alert alert-success">{{ service2.successMessage }}</div>
+
+      </div>
+
+    </div>
+
+    <div *ngIf="service2.warningMessage"
+         class="row my-5">
+
+      <div class="col-lg-8 offset-lg-2">
+
+        <div class="alert alert-warning">{{ service2.warningMessage }}</div>
+
       </div>
 
     </div>
 
   </div>
 
-  <div *ngIf="service.errorAsJson"
-       class="row my-5">
+    </div>
 
-    <div class="col-lg-8 offset-lg-2">
+    <div class="col-lg-4 p-4">
 
-      <div class="alert alert-danger">
-        <p>Error as JSON</p>
-        <p>
-          {{ service.errorAsJson }}
-        </p>
-      </div>
+      <h4>Reference Information</h4>
+
+      <p class="lead">
+        See <a href="https://www.npmjs.com/package/ngx-indexed-db">https://www.npmjs.com/package/ngx-indexed-db</a>
+      </p>
+
+      <h4>Questions</h4>
+
+      <p class="lead">
+        It appears that the <b>createObjectStore()</b> method creates the DB if it does not already exist. Is that correct?
+      </p>
+
+      <p class="lead">
+        How do you know when <b>createObjectStore()</b> is finished?
+      </p>
+
+      <p class="lead">
+        How do you know when <b>deleteObjectStore()</b> is finished?
+      </p>
+
+      <p class="lead">
+        It appears that the browser "remembers" the DB after it is deleted.
+        Is there no way to start over?
+      </p>
 
     </div>
 
   </div>
 
-  <div *ngIf="service.successMessage"
-       class="row my-5">
-
-    <div class="col-lg-8 offset-lg-2">
-
-      <div class="alert alert-success">{{ service.successMessage }}</div>
-
-    </div>
-
-  </div>
-
-  <div *ngIf="service.warningMessage"
-       class="row my-5">
-
-    <div class="col-lg-8 offset-lg-2">
-
-      <div class="alert alert-warning">{{ service.warningMessage }}</div>
-
-    </div>
-
-  </div>
+  <p>
+    &nbsp;
+  </p>
 
 </div>
 

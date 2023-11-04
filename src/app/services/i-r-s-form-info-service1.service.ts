@@ -3,7 +3,7 @@ import {IRSFormInfo} from "../models/i-r-s-form-info";
 import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import {NgxIndexedDBService, ObjectStoreMeta, ObjectStoreSchema} from "ngx-indexed-db";
 
-export const STORE_NAME: string = 'irsforms';
+const STORE_NAME: string = 'irsforms1';
 
 // STORE_SCHEMA seems to something of a misnomer.
 // It is used to define indexes to be created and used
@@ -16,7 +16,7 @@ const STORE_SCHEMA: ObjectStoreSchema[] = [];
 // the property to be used as the key to the store
 // whether the key will be automatically generated or not
 
-export const STORE_CONFIG = {
+const STORE_CONFIG = {
 
   keyPath: 'id',
 
@@ -24,7 +24,7 @@ export const STORE_CONFIG = {
 
 };
 
-export const STORE_META: ObjectStoreMeta = {
+const STORE_META: ObjectStoreMeta = {
 
   store: STORE_NAME,
 
@@ -37,7 +37,9 @@ export const STORE_META: ObjectStoreMeta = {
 @Injectable({
   providedIn: 'root'
 })
-export class IRSFormInfoService implements OnDestroy {
+export class IRSFormInfoService1 implements OnDestroy {
+
+  public storeName = STORE_NAME;
 
   public sampleData: IRSFormInfo[] = require('../data/data.json');
 
@@ -90,6 +92,7 @@ export class IRSFormInfoService implements OnDestroy {
     this.errorMessage = '';
     this.warningMessage = '';
     this.successMessage = '';
+    this.errorAsJson = '';
 
   }
 
@@ -102,6 +105,8 @@ export class IRSFormInfoService implements OnDestroy {
 
       this.addItem(item);
 
+      break;
+
     }
 
     // Show results
@@ -110,6 +115,9 @@ export class IRSFormInfoService implements OnDestroy {
   }
 
   addItem(item: IRSFormInfo) {
+
+    // Clear any prior messages
+    this.clearMessages( );
 
     this.sub = this.dbService
       .add(STORE_NAME, item)
@@ -139,15 +147,19 @@ export class IRSFormInfoService implements OnDestroy {
     this.dbService.clear(STORE_NAME).subscribe(
       (successDeleted) => {
 
-        this.fips = [];
-        this.fipsSubject.next(this.fips);
-
         console.log('success? ', successDeleted);
 
         if ( successDeleted ) {
+
           this.successMessage = 'Cleared store';
+
+          this.fips = [];
+          this.fipsSubject.next(this.fips);
+
         } else {
+
           this.errorMessage = 'Unable to clear store';
+
         }
 
       },
@@ -201,6 +213,9 @@ export class IRSFormInfoService implements OnDestroy {
   }
 
   public getAll() {
+
+    // Clear any prior messages
+    this.clearMessages( );
 
     this.sub = this.dbService.getAll(STORE_NAME).subscribe(
 
@@ -264,7 +279,6 @@ export class IRSFormInfoService implements OnDestroy {
     this.errorMessage = error.errorMessage;
 
     console.log( this.errorAsJson );
-
 
   }
 
